@@ -1,7 +1,7 @@
 
 const express=require('express');
 const cors= require('cors');
-const mysql=require("mysql");
+const mysql=require("mysql2");
 const bcrypt=require('bcryptjs');
 const app= express();
 const dotenv=require('dotenv');
@@ -12,10 +12,12 @@ app.use(express.json());
 app.use(cors());
 
 const db=mysql.createConnection({
-    user:"root",
-    password:process.env.PSW,
-    host:'localhost',
-    database:"res"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+     port:process.env.DB_PORT,
+     sll:false
 })
 ;
 db.connect(err => {
@@ -26,21 +28,21 @@ db.connect(err => {
     console.log('connected to db  ' );
   });
 
-app.put('/update/:email/:psw', async (req, res) => {
+app.put('/update/:email/:psw',  (req, res) => {
     const email = req.params.email;
     const password = req.params.psw;
     if (!user) {
         return res.status(400).json({ message: 'Invalid or expired token' });
       }
     try {
-        await db.query('SELECT * FROM personne WHERE email = ?', [email],async(err,result)=>{
+         db.query('SELECT * FROM personne WHERE email = ?', [email],async(err,result)=>{
             const l=result.length;
             if (l<=0) {
                 return (res.json({
                 message: "User doesn't exists",
                 status: false}));
             }
-                const hashedPassword= await bcrypt.hash(password,8);
+                const hashedPassword=  bcrypt.hash(password,8);
                 const query1 = `update personne set  password=? where email=?;`;
                 await db.query(query1, [hashedPassword,email],(err,result)=>{
                 if(err){
