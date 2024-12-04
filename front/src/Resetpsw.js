@@ -14,7 +14,7 @@ const Resetpsw=()=>{
         password: yup.string().required('Password is required').min(4, "Password should be at least 4 characters").max(20, "Password cannot exceed 20 characters")
     });
     const change=(email,psw)=>{
-        axios.put("http://localhost:6002/update/"+email+"/"+psw).then((res)=>{
+        axios.put("https://resetpsw.onrender.com/update/"+email+"/"+psw).then((res)=>{
             console.log(res.data);
             Swal.fire(
                 res.data.message 

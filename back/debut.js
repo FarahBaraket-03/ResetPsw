@@ -16,8 +16,7 @@ const db=mysql.createConnection({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-     port:process.env.DB_PORT,
-     sll:false
+    port:process.env.DB_PORT,
 })
 ;
 db.connect(err => {
@@ -35,7 +34,7 @@ app.put('/update/:email/:psw',  (req, res) => {
         return res.status(400).json({ message: 'Invalid or expired token' });
       }
     try {
-         db.query('SELECT * FROM personne WHERE email = ?', [email],async(err,result)=>{
+         db.query('SELECT * FROM personne WHERE email = ?', [email],(err,result)=>{
             const l=result.length;
             if (l<=0) {
                 return (res.json({
@@ -44,7 +43,7 @@ app.put('/update/:email/:psw',  (req, res) => {
             }
                 const hashedPassword=  bcrypt.hash(password,8);
                 const query1 = `update personne set  password=? where email=?;`;
-                await db.query(query1, [hashedPassword,email],(err,result)=>{
+                db.query(query1, [hashedPassword,email],(err,result)=>{
                 if(err){
                     console.log(err);
                     return (res.status(500).json({ message: "Error while querying the database", status: false }));
