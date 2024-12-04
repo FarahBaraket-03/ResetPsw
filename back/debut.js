@@ -11,7 +11,7 @@ dotenv.config();
 app.use(express.json());
 app.use(cors());
 
-const db=mysql.createPool({
+const db=mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -20,7 +20,7 @@ const db=mysql.createPool({
   
 })
 ;
-db.getConnection(err => {
+db.connect(err => {
     if (err) {
       console.error('error connecting to db: ' + err.stack);
       return;
