@@ -15,6 +15,7 @@ const db=mysql.createConnection({
     user:"root",
     password:process.env.PSW,
     host:'localhost',
+    port:3306,
     database:"res"
 })
 ;
