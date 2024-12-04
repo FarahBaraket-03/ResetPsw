@@ -4,7 +4,7 @@
   "description": "",
   "main": "debut.js",
   "scripts": {
-    "start": "npx nodemon debut.js",
+    "start": "debut.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "farah",
